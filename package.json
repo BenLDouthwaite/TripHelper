@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "webpack": "^4.15.1"
+  },
+  "scripts": {
+    "watch": "webpack --watch -d",
+    "build": "node node_modules/webpack/bin/webpack.js --config webpack.prod.js",
+    "start": "node node_modules/webpack-dev-server/bin/webpack-dev-server.js --open --config webpack.dev.js"
+  },
+  "babel": {
+    "presets": [
+      "env",
+      "react"
+    ]
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5",
+    "webpack-merge": "^4.1.4"
+  },
+  "private": true
+}
