@@ -1,4 +1,4 @@
-package com.bld.recos.controller;
+package com.bld.recos.service;
 
 import com.bld.recos.dto.Timeline;
 import org.springframework.stereotype.Service;
