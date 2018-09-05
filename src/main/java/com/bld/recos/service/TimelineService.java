@@ -69,19 +69,19 @@ public class TimelineService {
 
         TimelineEvent attractionToRestaurant = getJourney(attraction, restaurant);
 
-        List<Journey> waterBusJourneys = journeyRepository.findByJourneyType(JourneyType.WATERBUS);
+        List<Journey> waterBusJourneys = journeyRepository.findByCategory(JourneyType.WATERBUS);
         TimelineEvent waterBusJourney = getRandomTimelineItem(waterBusJourneys);
 
         List<Experience> landmarks = experienceRepository.findByCategory(ExperienceCategory.LANDMARK);
         TimelineEvent landmark = getRandomTimelineItem(landmarks);
 
-        List<Journey> bikeJourneys = journeyRepository.findByJourneyType(JourneyType.BIKE);
+        List<Journey> bikeJourneys = journeyRepository.findByCategory(JourneyType.BIKE);
         TimelineEvent bikeJourney = getRandomTimelineItem(bikeJourneys);
 
         List<Experience> experiences = experienceRepository.findByCategory(ExperienceCategory.EXPERIENCE);
         TimelineEvent experience = getRandomTimelineItem(experiences);
 
-        List<Journey> taxiJourneys = journeyRepository.findByJourneyType(JourneyType.TAXI);
+        List<Journey> taxiJourneys = journeyRepository.findByCategory(JourneyType.TAXI);
         TimelineEvent taxiJourney = getRandomTimelineItem(taxiJourneys);
 
         List<TimelineEvent> timelineEvents = Arrays.asList(attraction, attractionToRestaurant, restaurant, waterBusJourney, landmark, bikeJourney, experience, taxiJourney);
@@ -119,7 +119,7 @@ public class TimelineService {
     }
 
     private TimelineEvent getJourney(TimelineEvent attraction, TimelineEvent restaurant) {
-        List<Journey> walkingJourneys = journeyRepository.findByJourneyType(JourneyType.WALKING);
+        List<Journey> walkingJourneys = journeyRepository.findByCategory(JourneyType.WALKING);
 
         // TODO How can we guarantee results from here?
         List<Journey> journey = journeyRepository.findByFromIdAndToId(attraction.getId(), restaurant.getId());

@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface JourneyRepository extends JpaRepository<Journey, Long> {
 
-    List<Journey> findByJourneyType(JourneyType attraction);
+    List<Journey> findByCategory(JourneyType category);
 
     List<Journey> findByFromIdAndToId(Long fromId, Long toId);
 }
