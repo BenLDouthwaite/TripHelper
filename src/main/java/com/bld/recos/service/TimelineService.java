@@ -61,30 +61,31 @@ public class TimelineService {
 
     private Timeline getRandomTimeline(LocalDateTime startTime) {
         List<Experience> attractions = experienceRepository.findByCategory(ExperienceCategory.ATTRACTION);
-        TimelineEvent attraction = getRandomTimelineItem(attractions);
+        Experience attraction = getRandomTimelineItem(attractions);
 
 
         List<Experience> restaurants = experienceRepository.findByCategory(ExperienceCategory.RESTAURANT);
-        TimelineEvent restaurant = getRandomTimelineItem(restaurants);
+        Experience restaurant = getRandomTimelineItem(restaurants);
 
-        TimelineEvent attractionToRestaurant = getJourney(attraction, restaurant);
-
-        List<Journey> waterBusJourneys = journeyRepository.findByCategory(JourneyType.WATERBUS);
-        TimelineEvent waterBusJourney = getRandomTimelineItem(waterBusJourneys);
+        Journey attractionToRestaurant = getJourney(attraction, restaurant);
 
         List<Experience> landmarks = experienceRepository.findByCategory(ExperienceCategory.LANDMARK);
-        TimelineEvent landmark = getRandomTimelineItem(landmarks);
+        Experience landmark = getRandomTimelineItem(landmarks);
 
-        List<Journey> bikeJourneys = journeyRepository.findByCategory(JourneyType.BIKE);
-        TimelineEvent bikeJourney = getRandomTimelineItem(bikeJourneys);
+        Journey restaurantToLandmark = getJourney(restaurant, landmark);
 
         List<Experience> experiences = experienceRepository.findByCategory(ExperienceCategory.EXPERIENCE);
-        TimelineEvent experience = getRandomTimelineItem(experiences);
+        Experience experience = getRandomTimelineItem(experiences);
 
-        List<Journey> taxiJourneys = journeyRepository.findByCategory(JourneyType.TAXI);
-        TimelineEvent taxiJourney = getRandomTimelineItem(taxiJourneys);
+        Journey landmarkToExperience = getJourney(landmark, experience);
 
-        List<TimelineEvent> timelineEvents = Arrays.asList(attraction, attractionToRestaurant, restaurant, waterBusJourney, landmark, bikeJourney, experience, taxiJourney);
+        List<Experience> airports = experienceRepository.findByCategory(ExperienceCategory.AIRPORT);
+        Experience airport = getRandomTimelineItem(airports);
+
+        Journey experienceToAirport = getJourney(experience, airport);
+
+        List<TimelineEvent> timelineEvents = Arrays.asList(attraction, attractionToRestaurant, restaurant,
+                restaurantToLandmark, landmark, landmarkToExperience, experience, experienceToAirport, airport);
 
         Timeline timeline = generateTimeline(startTime, timelineEvents);
 
@@ -118,17 +119,54 @@ public class TimelineService {
         return timeline;
     }
 
-    private TimelineEvent getJourney(TimelineEvent attraction, TimelineEvent restaurant) {
-        List<Journey> walkingJourneys = journeyRepository.findByCategory(JourneyType.WALKING);
+    private Journey getJourney(Experience from, Experience to) {
+        List<Journey> journeys = journeyRepository.findByFromIdAndToId(from.getId(), to.getId());
 
-        // TODO How can we guarantee results from here?
-        List<Journey> journey = journeyRepository.findByFromIdAndToId(attraction.getId(), restaurant.getId());
+        if (journeys.isEmpty()) {
+            journeys.addAll(fakeJourneys(from, to));
+        }
 
-        TimelineEvent walkingJourney = getRandomTimelineItem(walkingJourneys);
-        return walkingJourney;
+        Journey journey = getRandomTimelineItem(journeys);
+        return journey;
     }
 
-    public TimelineEvent getRandomTimelineItem(List<? extends TimelineEvent> experiences) {
+    private List<Journey> fakeJourneys(Experience from, Experience to) {
+        List<Journey> result = new ArrayList<>();
+        Random random = new Random();
+
+        Journey walkingJourney = new FakeJourney(from, to, JourneyType.WALKING, random);
+        if (walkingJourney.getAverageTravelTime() <= 20) {
+            result.add(walkingJourney);
+        }
+
+        Journey bikeJourney = new FakeJourney(from, to, JourneyType.BIKE, random);
+        if (bikeJourney.getAverageTravelTime() <= 25) {
+            result.add(bikeJourney);
+        }
+
+        result.add(new FakeJourney(from, to, JourneyType.UNDERGROUND, random));
+        result.add(new FakeJourney(from, to, JourneyType.BUS, random));
+        result.add(new FakeJourney(from, to, JourneyType.TAXI, random));
+
+        if (offerWaterBusBetween(from, to)) {
+            result.add(new FakeJourney(from, to, JourneyType.WATERBUS, random));
+        }
+
+        return result;
+    }
+
+    private boolean offerWaterBusBetween(Experience from, Experience to) {
+
+        String fromName = from.getName();
+        String toName = to.getName();
+        String[] riverLocations = new String[] { "Tate", "Borough", "Morpeth", "Pauls", "Tower", "Parliament"};
+
+        return Arrays.stream(riverLocations).anyMatch(fromName::contains)
+                && Arrays.stream(riverLocations).anyMatch(toName::contains)
+                && !from.equals(to);
+    }
+
+    public <T extends TimelineEvent> T getRandomTimelineItem(List<T> experiences) {
         Random random = new Random();
         return experiences.get(random.nextInt(experiences.size()));
     }
