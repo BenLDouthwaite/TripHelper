@@ -30,20 +30,29 @@ public class TimelineService {
         List<Experience> attractions = experienceRepository.findByCategory(ExperienceCategory.ATTRACTION);
         TimelineItem attraction = getRandomTimelineItem(attractions);
 
-        List<Journey> journeys = journeyRepository.findByJourneyType(JourneyType.WALKING);
-        TimelineItem walkingJourney = getRandomTimelineItem(journeys);
+        List<Journey> walkingJourneys = journeyRepository.findByJourneyType(JourneyType.WALKING);
+        TimelineItem walkingJourney = getRandomTimelineItem(walkingJourneys);
 
         List<Experience> restaurants = experienceRepository.findByCategory(ExperienceCategory.RESTAURANT);
         TimelineItem restaurant = getRandomTimelineItem(restaurants);
 
+        List<Journey> waterBusJourneys = journeyRepository.findByJourneyType(JourneyType.WATERBUS);
+        TimelineItem waterBusJourney = getRandomTimelineItem(waterBusJourneys);
+
         List<Experience> landmarks = experienceRepository.findByCategory(ExperienceCategory.LANDMARK);
         TimelineItem landmark = getRandomTimelineItem(landmarks);
+
+        List<Journey> bikeJourneys = journeyRepository.findByJourneyType(JourneyType.BIKE);
+        TimelineItem bikeJourney = getRandomTimelineItem(bikeJourneys);
 
         List<Experience> experiences = experienceRepository.findByCategory(ExperienceCategory.EXPERIENCE);
         TimelineItem experience = getRandomTimelineItem(experiences);
 
+        List<Journey> taxiJourneys = journeyRepository.findByJourneyType(JourneyType.TAXI);
+        TimelineItem taxiJourney = getRandomTimelineItem(taxiJourneys);
+
         Timeline timeline = new Timeline();
-        timeline.setTimelineItems(Arrays.asList(attraction, walkingJourney, restaurant, landmark, experience));
+        timeline.setTimelineItems(Arrays.asList(attraction, walkingJourney, restaurant, waterBusJourney, landmark, bikeJourney, experience, taxiJourney));
         return timeline;
     }
 
