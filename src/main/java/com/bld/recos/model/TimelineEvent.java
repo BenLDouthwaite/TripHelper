@@ -4,5 +4,6 @@ import java.time.LocalTime;
 
 public interface TimelineEvent {
 
+    Long getId();
     Long getTimeToSpendInMinutes();
 }

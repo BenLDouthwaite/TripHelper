@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,11 +28,11 @@ public class TimelineService {
         List<Experience> attractions = experienceRepository.findByCategory(ExperienceCategory.ATTRACTION);
         TimelineEvent attraction = getRandomTimelineItem(attractions);
 
-        List<Journey> walkingJourneys = journeyRepository.findByJourneyType(JourneyType.WALKING);
-        TimelineEvent walkingJourney = getRandomTimelineItem(walkingJourneys);
 
         List<Experience> restaurants = experienceRepository.findByCategory(ExperienceCategory.RESTAURANT);
         TimelineEvent restaurant = getRandomTimelineItem(restaurants);
+
+        TimelineEvent attractionToRestaurant = getJourney(attraction, restaurant);
 
         List<Journey> waterBusJourneys = journeyRepository.findByJourneyType(JourneyType.WATERBUS);
         TimelineEvent waterBusJourney = getRandomTimelineItem(waterBusJourneys);
@@ -50,7 +51,7 @@ public class TimelineService {
 
         Timeline timeline = new Timeline();
 
-        List<TimelineEvent> timelineEvents = Arrays.asList(attraction, walkingJourney, restaurant, waterBusJourney, landmark, bikeJourney, experience, taxiJourney);
+        List<TimelineEvent> timelineEvents = Arrays.asList(attraction, attractionToRestaurant, restaurant, waterBusJourney, landmark, bikeJourney, experience, taxiJourney);
 
         List<TimelineItem> timelineItems = new ArrayList<>();
 
@@ -60,10 +61,12 @@ public class TimelineService {
             TimelineItem item = new TimelineItem();
             item.setEvent(timelineEvent);
             item.setStart(startOfEvent);
+            item.setStartEpoch(startOfEvent.toEpochSecond(ZoneOffset.UTC));
 
             LocalDateTime endOfEvent = startOfEvent.plusMinutes(timelineEvent.getTimeToSpendInMinutes());
 
             item.setEnd(endOfEvent);
+            item.setEndEpoch(endOfEvent.toEpochSecond(ZoneOffset.UTC));
 
             startOfEvent = endOfEvent;
 
@@ -73,6 +76,16 @@ public class TimelineService {
         timeline.setTimelineItems(timelineItems);
 
         return timeline;
+    }
+
+    private TimelineEvent getJourney(TimelineEvent attraction, TimelineEvent restaurant) {
+        List<Journey> walkingJourneys = journeyRepository.findByJourneyType(JourneyType.WALKING);
+
+        // TODO How can we guarantee results from here?
+        List<Journey> journey = journeyRepository.findByFromIdAndToId(attraction.getId(), restaurant.getId());
+
+        TimelineEvent walkingJourney = getRandomTimelineItem(walkingJourneys);
+        return walkingJourney;
     }
 
     public TimelineEvent getRandomTimelineItem(List<? extends TimelineEvent> experiences) {

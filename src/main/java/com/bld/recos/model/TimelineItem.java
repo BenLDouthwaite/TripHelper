@@ -13,4 +13,8 @@ public class TimelineItem {
 
     private LocalDateTime end;
 
+    private Long startEpoch;
+
+    private Long endEpoch;
+
 }
