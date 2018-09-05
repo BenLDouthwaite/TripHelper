@@ -16,6 +16,7 @@ public class Journey {
     @Column
     private Long toId;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private JourneyType journeyType;
 

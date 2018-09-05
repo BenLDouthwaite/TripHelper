@@ -4,5 +4,7 @@ public enum ExperienceCategory {
     ATTRACTION,
     LANDMARK,
     EXPERIENCE,
-    RESTAURANT
+    RESTAURANT,
+    AIRPORT,
+    HOTEL
 }
