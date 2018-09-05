@@ -29,7 +29,7 @@ public class Journey implements TimelineEvent {
 
     @Enumerated(EnumType.STRING)
     @Column
-    private JourneyType journeyType;
+    private JourneyType category;
 
     @Column
     private Double price;
