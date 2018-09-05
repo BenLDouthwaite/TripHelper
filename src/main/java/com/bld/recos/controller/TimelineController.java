@@ -17,11 +17,6 @@ public class TimelineController {
     @Autowired
     private TimelineService timelineService;
 
-    @GetMapping("/timeline")
-    public Timeline getTimeline() {
-        return timelineService.getTimeline();
-    }
-
     @GetMapping("/timeline/{startTime}/{endTime}")
     public Timeline getTimelineBounded(
             @PathVariable(value = "startTime") @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss") LocalDateTime startTime,

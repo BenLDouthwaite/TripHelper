@@ -1,29 +1,18 @@
 package com.bld.recos.dto;
 
-import com.bld.recos.model.Experience;
-import com.bld.recos.model.Journey;
+import com.bld.recos.model.TimelineItem;
 
 import java.util.List;
 
 public class Timeline {
 
-    private List<Experience> experiences;
-
-    private List<Journey> journeys;
-
-    public List<Experience> getExperiences() {
-        return experiences;
+    public List<TimelineItem> getTimelineItems() {
+        return timelineItems;
     }
 
-    public void setExperiences(List<Experience> experiences) {
-        this.experiences = experiences;
+    public void setTimelineItems(List<TimelineItem> timelineItems) {
+        this.timelineItems = timelineItems;
     }
 
-    public List<Journey> getJourneys() {
-        return journeys;
-    }
-
-    public void setJourneys(List<Journey> journeys) {
-        this.journeys = journeys;
-    }
+    private List<TimelineItem> timelineItems;
 }

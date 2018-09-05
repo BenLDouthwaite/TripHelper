@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "experience")
 @Data
-public class Experience {
+public class Experience implements TimelineItem{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
