@@ -10,11 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "experience")
 @Data
-public class Experience implements TimelineItem{
+public class Experience implements TimelineEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,5 +42,10 @@ public class Experience implements TimelineItem{
 
     public Experience() {
 
+    }
+
+    @Override
+    public Long getTimeToSpendInMinutes() {
+        return averageTimeSpent;
     }
 }

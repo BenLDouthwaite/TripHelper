@@ -1,4 +1,16 @@
 package com.bld.recos.model;
 
-public interface TimelineItem {
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+public class TimelineItem {
+
+    private TimelineEvent event;
+
+    private LocalDateTime start;
+
+    private LocalDateTime end;
+
 }

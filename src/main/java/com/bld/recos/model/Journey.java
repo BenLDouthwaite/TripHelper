@@ -10,11 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "journey")
 @Data
-public class Journey implements TimelineItem{
+public class Journey implements TimelineEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,5 +38,10 @@ public class Journey implements TimelineItem{
     private Long averageTravelTime;
 
     public Journey() {
+    }
+
+    @Override
+    public Long getTimeToSpendInMinutes() {
+        return averageTravelTime;
     }
 }
