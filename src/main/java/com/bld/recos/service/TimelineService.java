@@ -98,8 +98,19 @@ public class TimelineService {
             journeys.addAll(fakeJourneys(from, to));
         }
 
-        Journey journey = getRandomTimelineItem(journeys);
-        journey.setSuggested(true);
+        Journey journey = null;
+        for (Journey j:journeys) {
+            if (j.getCategory() == JourneyType.WATERBUS) {
+                j.setSuggested(true);
+                journey = j;
+            }
+        }
+
+        if (journey == null) {
+            journey = getRandomTimelineItem(journeys);
+            journey.setSuggested(true);
+        }
+
         return journey;
     }
 
@@ -117,9 +128,20 @@ public class TimelineService {
             result.add(bikeJourney);
         }
 
-        result.add(new FakeJourney(from, to, JourneyType.UNDERGROUND, random));
-        result.add(new FakeJourney(from, to, JourneyType.BUS, random));
-        result.add(new FakeJourney(from, to, JourneyType.TAXI, random));
+        Journey tubeJourney = new FakeJourney(from, to, JourneyType.UNDERGROUND, random);
+        if (tubeJourney.getAverageTravelTime() > 4) {
+            result.add(tubeJourney);
+        }
+
+        Journey busJourney = new FakeJourney(from, to, JourneyType.BUS, random);
+        if (busJourney.getAverageTravelTime() > 4) {
+            result.add(busJourney);
+        }
+
+        Journey taxiJourney = new FakeJourney(from, to, JourneyType.TAXI, random);
+        if (taxiJourney.getAverageTravelTime() > 4) {
+            result.add(taxiJourney);
+        }
 
         if (offerWaterBusBetween(from, to)) {
             result.add(new FakeJourney(from, to, JourneyType.WATERBUS, random));
