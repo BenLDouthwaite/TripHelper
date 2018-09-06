@@ -21,43 +21,9 @@ public class TimelineService {
     @Autowired
     private JourneyRepository journeyRepository;
 
-    private static List<Long> firstTimelineIds = Arrays.asList(15L,3L,1L,49L,11L,43L,9L,40L);
-    private static List<Long> secondTimelineIds = Arrays.asList(16L,3L,1L,49L,11L,43L,9L,40L);
-    private static List<Long> thirdTimelineIds = Arrays.asList(17L,3L,1L,49L,11L,43L,9L,40L);
-
-    private static Map<Long, Timeline> returnMap;
-    static {
-        returnMap = new HashMap<>();
-    }
-
-    private static Long callCount = 0L;
-
-    private Timeline generateTimeline(List<Long> ids) {
-
-        LocalDateTime startTime = LocalDateTime.of(2018, 9, 4, 10, 0, 0);
-
-        TimelineEvent attraction = experienceRepository.findById(ids.get(0)).get();
-        TimelineEvent walking = journeyRepository.findById(ids.get(1)).get();
-        TimelineEvent restaurant = experienceRepository.findById(ids.get(2)).get();
-        TimelineEvent waterBusJourney = journeyRepository.findById(ids.get(3)).get();
-        TimelineEvent landmark = experienceRepository.findById(ids.get(4)).get();
-        TimelineEvent bikeJourney = journeyRepository.findById(ids.get(5)).get();
-        TimelineEvent experience = experienceRepository.findById(ids.get(6)).get();
-        TimelineEvent taxiJourney = journeyRepository.findById(ids.get(7)).get();
-
-        List<TimelineEvent> timelineEvents = Arrays.asList(attraction, walking, restaurant, waterBusJourney, landmark, bikeJourney, experience, taxiJourney);
-
-        Timeline timeline = generateTimeline(startTime, timelineEvents);
-
-        return timeline;
-    }
-
     public Timeline getTimelineBounded(final LocalDateTime startTime, final LocalDateTime endTime) {
 
         return getRandomTimeline(startTime);
-//        Timeline timeline = returnMap.get(callCount);
-//        callCount = ++callCount % 3;
-//        return timeline;
     }
 
     private Timeline getRandomTimeline(LocalDateTime startTime) {
@@ -176,17 +142,6 @@ public class TimelineService {
     public <T extends TimelineEvent> T getRandomTimelineItem(List<T> experiences) {
         Random random = new Random();
         return experiences.get(random.nextInt(experiences.size()));
-    }
-
-    @PostConstruct
-    public void initialiseData() {
-//        Timeline first = generateTimeline(firstTimelineIds);
-//        Timeline second = generateTimeline(secondTimelineIds);
-//        Timeline third = generateTimeline(thirdTimelineIds);
-//
-//        returnMap.put(0L, first);
-//        returnMap.put(1L, second);
-//        returnMap.put(2L, third);
     }
 
     public List<Journey> getJourneyOptions(Long fromId, Long toId) {
