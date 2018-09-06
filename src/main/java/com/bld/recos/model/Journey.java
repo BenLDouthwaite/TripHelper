@@ -37,6 +37,8 @@ public class Journey implements TimelineEvent {
     @Column
     private Long averageTravelTime;
 
+    private boolean suggested;
+
     public Journey() {
     }
 

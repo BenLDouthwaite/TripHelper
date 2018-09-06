@@ -133,6 +133,7 @@ public class TimelineService {
         }
 
         Journey journey = getRandomTimelineItem(journeys);
+        journey.setSuggested(true);
         return journey;
     }
 
@@ -186,5 +187,16 @@ public class TimelineService {
 //        returnMap.put(0L, first);
 //        returnMap.put(1L, second);
 //        returnMap.put(2L, third);
+    }
+
+    public List<Journey> getJourneyOptions(Long fromId, Long toId) {
+        Experience fromExperience = experienceRepository.findById(fromId).get();
+        Experience toExperience = experienceRepository.findById(toId).get();
+        List<Journey> journeys = fakeJourneys(fromExperience, toExperience);
+
+        int suggested = new Random().nextInt(journeys.size());
+        journeys.get(suggested).setSuggested(true);
+
+        return journeys;
     }
 }
