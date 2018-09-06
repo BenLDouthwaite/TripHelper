@@ -109,12 +109,12 @@ public class TimelineService {
             TimelineItem item = new TimelineItem();
             item.setEvent(timelineEvent);
             item.setStart(startOfEvent);
-            item.setStartEpoch(startOfEvent.toEpochSecond(ZoneOffset.UTC));
+            item.setStartEpoch(startOfEvent.toEpochSecond(ZoneOffset.UTC) * 1000);
 
             LocalDateTime endOfEvent = startOfEvent.plusMinutes(timelineEvent.getTimeToSpendInMinutes());
 
             item.setEnd(endOfEvent);
-            item.setEndEpoch(endOfEvent.toEpochSecond(ZoneOffset.UTC));
+            item.setEndEpoch(endOfEvent.toEpochSecond(ZoneOffset.UTC) * 1000);
 
             startOfEvent = endOfEvent;
 
