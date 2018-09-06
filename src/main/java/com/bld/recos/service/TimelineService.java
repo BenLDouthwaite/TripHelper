@@ -54,15 +54,21 @@ public class TimelineService {
 
     public Timeline getTimelineBounded(final LocalDateTime startTime, final LocalDateTime endTime) {
 
-        Timeline timeline = returnMap.get(callCount);
-        callCount = ++callCount % 3;
-        return timeline;
+        return getRandomTimeline(startTime);
+//        Timeline timeline = returnMap.get(callCount);
+//        callCount = ++callCount % 3;
+//        return timeline;
     }
 
     private Timeline getRandomTimeline(LocalDateTime startTime) {
+
+        List<Experience> hotels = experienceRepository.findByCategory(ExperienceCategory.HOTEL);
+        Experience hotel = getRandomTimelineItem(hotels);
+
         List<Experience> attractions = experienceRepository.findByCategory(ExperienceCategory.ATTRACTION);
         Experience attraction = getRandomTimelineItem(attractions);
 
+        Journey hotelToAttraction = getJourney(hotel, attraction);
 
         List<Experience> restaurants = experienceRepository.findByCategory(ExperienceCategory.RESTAURANT);
         Experience restaurant = getRandomTimelineItem(restaurants);
@@ -84,7 +90,7 @@ public class TimelineService {
 
         Journey experienceToAirport = getJourney(experience, airport);
 
-        List<TimelineEvent> timelineEvents = Arrays.asList(attraction, attractionToRestaurant, restaurant,
+        List<TimelineEvent> timelineEvents = Arrays.asList(hotel, hotelToAttraction, attraction, attractionToRestaurant, restaurant,
                 restaurantToLandmark, landmark, landmarkToExperience, experience, experienceToAirport, airport);
 
         Timeline timeline = generateTimeline(startTime, timelineEvents);
@@ -173,12 +179,12 @@ public class TimelineService {
 
     @PostConstruct
     public void initialiseData() {
-        Timeline first = generateTimeline(firstTimelineIds);
-        Timeline second = generateTimeline(secondTimelineIds);
-        Timeline third = generateTimeline(thirdTimelineIds);
-
-        returnMap.put(0L, first);
-        returnMap.put(1L, second);
-        returnMap.put(2L, third);
+//        Timeline first = generateTimeline(firstTimelineIds);
+//        Timeline second = generateTimeline(secondTimelineIds);
+//        Timeline third = generateTimeline(thirdTimelineIds);
+//
+//        returnMap.put(0L, first);
+//        returnMap.put(1L, second);
+//        returnMap.put(2L, third);
     }
 }

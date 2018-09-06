@@ -23,23 +23,29 @@ public class FakeJourney extends Journey {
 
         switch (getCategory()) {
             case BUS:
-                setAverageTravelTime((long)(distanceKm * 6 * multiplier(random)));
+                setAverageTravelTime((long)(distanceKm * 6));
                 setPrice(1.5);
+                break;
             case BIKE:
-                setAverageTravelTime((long)(distanceKm * 6 * multiplier(random)));
+                setAverageTravelTime((long)(distanceKm * 6));
                 setPrice(2.0);
+                break;
             case WALKING:
-                setAverageTravelTime((long)(distanceKm * 15 * multiplier(random)));
+                setAverageTravelTime((long)(distanceKm * 15));
                 setPrice(0.0);
+                break;
             case TAXI:
-                setAverageTravelTime((long)(distanceKm * 5 * multiplier(random)));
-                setPrice(Math.min(distanceKm * 6, 3.0));
+                setAverageTravelTime((long)(distanceKm * 5));
+                setPrice(roundToTwoDecimalPlaces(Math.max(distanceKm * 6, 3.0)));
+                break;
             case UNDERGROUND:
-                setAverageTravelTime((long)(distanceKm * 5 * multiplier(random)));
+                setAverageTravelTime((long)(distanceKm * 5));
                 setPrice(2.4);
+                break;
             case WATERBUS:
-                setAverageTravelTime((long)(distanceKm * 7 * multiplier(random)));
+                setAverageTravelTime((long)(distanceKm * 7));
                 setPrice(6.5);
+                break;
             default:
                 setAverageTravelTime(99999L);
                 setPrice(99999.0);
@@ -50,11 +56,11 @@ public class FakeJourney extends Journey {
         double x = from.getLatitude() - to.getLatitude();
         double y = from.getLongitude() - to.getLongitude();
 
-        return Math.sqrt(x*x + y*y);
+        return Math.sqrt(x*x + y*y) * 70;
     }
 
-    private double multiplier(Random random) {
-        return random.nextDouble() * 0.1 + 0.95;
+    private double roundToTwoDecimalPlaces(double price) {
+        return Math.round(price*100.0)/100.0;
     }
 
 }
